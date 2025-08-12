@@ -7,7 +7,7 @@ class TestCookieMethodRequest:
 
         cookies = response.cookies
 
-        print(f"Cookies from response: {cookies.items()}")  # Выводим все cookie и их значения
+        print(f"Cookies from response: {cookies.items()}")
 
         assert 'HomeWork' in cookies, "Cookie 'HomeWork' is not present in the response"
 
