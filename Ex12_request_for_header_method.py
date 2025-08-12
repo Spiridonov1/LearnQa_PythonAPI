@@ -1,6 +1,6 @@
 import requests
 
-class TestCookieMethodRequest:
+class TestHeaderMethodRequest:
     def test_request_homework_header(self):
 
         url = "https://playground.learnqa.ru/api/homework_header"
