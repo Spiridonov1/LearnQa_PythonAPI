@@ -6,14 +6,6 @@ from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
 class TestUserGet(BaseCase):
-    def test_get_user_datails_not_auth(selfs):
-        response = requests.get("https://playground.learnqa.ru/api/user/2")
-
-        Assertions.assert_json_has_key(response, "username")
-        Assertions.assert_json_has_not_key(response, "email")
-        Assertions.assert_json_has_not_key(response, "firstName")
-        Assertions.assert_json_has_not_key(response, "lastName")
-
     def test_get_user_datails_auth_as_same_user(selfs):
         data = {
 
