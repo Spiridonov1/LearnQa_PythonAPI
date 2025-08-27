@@ -1,8 +1,10 @@
-import requests
 import pytest
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
+from lib.my_requests import MyRequests
+import allure
 
+@allure.epic("User register cases")
 class TestUserRegister(BaseCase):
     requests_parameter = [
         ("123","learnqa", "firstName", "lastName", None),
@@ -13,6 +15,7 @@ class TestUserRegister(BaseCase):
 
     ]
 
+    @allure.description("This test successfully authorize user by email and password")
     def test_create_user_witch_existing_email(self):
         email = 'vinkotov@example.com'
         data = {
@@ -23,11 +26,12 @@ class TestUserRegister(BaseCase):
             'email': email
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("/user/", data=data)
 
         assert response.status_code == 400, f"Unexpected status code {response.status_code}"
         assert  response.content.decode("utf-8") == f"Users with email '{email}' already exists", f"Unexpected response content {response.content}"
 
+    @allure.description("Create a user with an invalid email")
     def test_create_user_not_valid_email(self):
         email = 'vinkotovexample.com'
         data = {
@@ -38,11 +42,12 @@ class TestUserRegister(BaseCase):
             'email': email
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("/user/", data=data)
 
         assert response.status_code == 400, f"Unexpected status code {response.status_code}"
         assert response.content.decode("utf-8") == f"Invalid email format", f"Unexpected response content {response.content}"
 
+    @allure.description("Create a user with a short name")
     def test_create_user_short_name(self):
         first_name = 'L'
         email = 'spiridonov@example.com'
@@ -54,11 +59,12 @@ class TestUserRegister(BaseCase):
             'email': email
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("/user/", data=data)
 
         assert response.status_code == 400, f"Unexpected status code {response.status_code}"
         assert response.content.decode("utf-8") == f"The value of 'firstName' field is too short", f"Unexpected response content {response.content}"
 
+    @allure.description("Create a user with a long name")
     def test_create_user_long_name(self):
         first_name = 'LongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongNameLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongNameLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongName'
         email = 'spiridonov3@example.com'
@@ -70,11 +76,12 @@ class TestUserRegister(BaseCase):
             'email': email
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("/user/", data=data)
 
         assert response.status_code == 400, f"Unexpected status code {response.status_code}"
         assert response.content.decode("utf-8") == f"The value of 'firstName' field is too long", f"Unexpected response content {response.content}"
 
+    @allure.description("Create a user without a required parameter")
     @pytest.mark.parametrize(("password", "username", "first_name", "last_name","email"), requests_parameter)
     def test_create_user_no_required_parameter(self, password, username, first_name, last_name, email):
         data = {
@@ -85,7 +92,7 @@ class TestUserRegister(BaseCase):
             'email': email
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("/user/", data=data)
 
         assert response.status_code == 400, f"Unexpected status code {response.status_code}"
 
